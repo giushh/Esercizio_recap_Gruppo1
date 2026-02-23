@@ -1,4 +1,5 @@
 from Fabio.gestione_dati import DataManager
+from datetime import datetime as dt
 
 class Utente:
     def __init__(self, username: str, password: str):
@@ -18,11 +19,11 @@ class Utente:
 
 class Studente(Utente):
     # ereditarietà: studente eredita username/password e metodi da utente
-    def __init__(self, username: str, password: str, nome: str, corso: str, data_ingresso: str = ""):
+    def __init__(self, username: str, password: str, nome: str, corso: str):
         super().__init__(username, password)
         self._nome = nome
         self._corso = corso
-        self._data_ingresso = data_ingresso  # info extra che l'admin può stampare (esempio polimorfismo)
+        self._data_ingresso = dt.now().strftime("%d-%m-%Y %H:%M:%S")  # info extra che l'admin può stampare (esempio polimorfismo)
 
     def get_nome(self):
         return self._nome

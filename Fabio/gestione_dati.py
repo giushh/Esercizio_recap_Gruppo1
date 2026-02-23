@@ -83,9 +83,9 @@ class DataManager:
         cls.write_f(cls.get_login_file(), [])
     
     @classmethod
-    def log_intervention(cls, motivazione: str, corso: str):
+    def log_intervention(cls, motivazione: str, corso: str, date):
         with open("db/interventi.log", "a") as f:
-            f.write(f"Intervento: {motivazione} - Corso: {corso}\n")
+            f.write(f"Intervento: {motivazione} - Corso: {corso} - Data: {date}\n")
     
     #generatore id univoco per ogni studente, basato sul numero di studenti già presenti
     @classmethod

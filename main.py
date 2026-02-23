@@ -1,7 +1,7 @@
 
 from Ilaria.logica_aula import Studente, Admin, Aula
 from Fabio.gestione_dati import DataManager
-
+from datetime import datetime as dt
 
 def main():
     aula = Aula("informatica")  # per ora una sola aula (poi aule todo)
@@ -124,7 +124,9 @@ def main():
 
                                 case "4":
                                     motivazione = input("\nMotivazione reset \n> ")
-                                    utente_loggato.reset_sistema(DataManager, motivazione)
+                                    corso = input("Corso da resettare (tutti per resettare tutto) \n> ")
+                                    date = dt.now().strftime("%d-%m-%Y %H:%M:%S")
+                                    utente_loggato.reset_sistema(DataManager, motivazione, corso, date)
                                     print("\nReset effettuato.")
 
                                     # svuoto anche l'aula in memoria per coerenza
