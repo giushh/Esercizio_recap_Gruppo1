@@ -44,7 +44,7 @@ class Studente(Utente):
         # i metodi del data manager salvano su json e ritornano bool (ok/non ok)
         # qui ritorniamo un oggetto studente se la registrazione va bene, altrimenti None
 
-        if gestione_dati.esiste_utente(username):
+        if gestione_dati.user_check(username):
             return None
 
         studente = cls(username, password, nome, corso)
@@ -101,14 +101,14 @@ class Admin(Utente):
             return False
 
         # to do: questo metodo dovrà esistere nel data manager
-        gestione_dati.aggiorna_corso(username, nuovo_corso)
+        gestione_dati.courr_update(username, nuovo_corso)
         return True
 
     def reset_sistema(self, gestione_dati, motivazione: str):
         # reset completo: elimina lista studenti e credenziali
         # to do: questi metodi dovranno esistere nel data manager
-        gestione_dati.reset_studenti()
-        gestione_dati.intervento(motivazione)
+        gestione_dati.reset_students()
+        gestione_dati.log_intervention(motivazione)
 
     def stampa_aula(self, aula: "Aula"):
         # polimorfismo: l'admin stampa più info (esempio: data ingresso)
