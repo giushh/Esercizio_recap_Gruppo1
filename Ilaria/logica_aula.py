@@ -86,7 +86,7 @@ class Studente(Utente):
                 nome = u.get("nome", "")
                 corso = u.get("corso", "")
                 data_ingresso = u.get("data_ingresso", "")
-                return cls(username, password, nome, corso, data_ingresso)
+                return cls(username, password, nome, corso)
 
         return None
 
