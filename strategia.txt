@@ -1,3 +1,14 @@
 2 moduli
 - gestione dati - Fabio
+
+-- 2 file json: utenti.json, login.json
+(è la struttura più simile ad un DB per facilitare la gestione)   
+
+
 - logica software - Ilaria
+
+-- classe Utente padre, da cui nascono le classi figlie di Studente e Admin
+
+la classe Studente può registrarsi o stampare l'aula (o aule TODO)
+la classe Admin può aggiungere studenti all'aula (Ind.Mod studenti) o stampare l'aula (polimorfismo: stampa piu info dello studente) 
+e può resettare la lista (cioè eliminare l'aula), senza registrazione dal DB, ma con utente e pass riservate
