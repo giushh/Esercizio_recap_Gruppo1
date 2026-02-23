@@ -12,3 +12,75 @@
 la classe Studente può registrarsi o stampare l'aula (o aule TODO)
 la classe Admin può aggiungere studenti all'aula (Ind.Mod studenti) o stampare l'aula (polimorfismo: stampa piu info dello studente) 
 e può resettare la lista (cioè eliminare l'aula), senza registrazione dal DB, ma con utente e pass riservate
+
+********** GERARCHIE CLASSI *********
+classe Utente
+attributi:
+_username
+__password
+
+metodi:
+init(username, password)
+get_username()
+check_password(password)
+stampa_aula(aula)
+
+******************************************************************
+
+classe studente (eredita da utente)
+attributi:
+_username (ereditato)
+__password (ereditato)
+_nome
+_corso
+
+metodi:
+init(username, password, nome, corso)
+get_nome()
+get_corso()
+set_corso(nuovo_corso)
+registrati(gestione_dati, username, password, nome, corso) [classmethod]
+-> MI SERVE METODO esiste_utente(username) e salva_utente(studente). studente è un oggetto
+
+login(gestione_dati, username, password) [classmethod]
+-> MI SERVE MEDOTO studente = gestione_dati.carica_studente(username) che dovrebbe ritornare l'oggetto o None 
+
+stampa_aula(aula) (ereditato da utente)
+
+******************************************************************
+
+classe admin (eredita da utente)
+attributi:
+_username (ereditato)
+__password (ereditato)
+ADMIN_USER (costante di classe)
+ADMIN_PASS (costante di classe)
+
+metodi:
+init(username, password)
+login_admin(username, password) [classmethod]
+aggiungi_studente(gestione_dati, aula, username, password, nome, corso)
+modifica_studente(gestione_dati, aula, username, nuovo_corso)
+-> MI SERVE METODO aggiorna_corso(username, nuovo corso)
+
+reset_sistema(gestione_dati, motivazione)
+-> MI SERVE METODO reset_studenti() e intervento(motivazione)
+
+stampa_aula(aula) (override del metodo della classe utente – polimorfismo)
+
+******************************************************************
+
+classe aula
+attributi:
+_nome_aula
+__studenti (lista di oggetti studente)
+
+metodi:
+init(nome_aula)
+get_nome_aula()
+get_studenti()
+aggiungi_studente(studente)
+trova_studente_per_username(username)
+modifica_corso_studente(username, nuovo_corso)
+ordina_per_corso()
+stampa(admin=False)
