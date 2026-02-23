@@ -1,0 +1,3 @@
+2 moduli
+- gestione dati - Fabio
+- logica software - Ilaria
