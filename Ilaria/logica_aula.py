@@ -1,6 +1,4 @@
-
 from Fabio.gestione_dati import DataManager
-
 
 class Utente:
     def __init__(self, username: str, password: str):
@@ -26,7 +24,7 @@ class Studente(Utente):
         self._corso = corso
         self._data_ingresso = data_ingresso  # info extra che l'admin può stampare (esempio polimorfismo)
 
-    def get_nome(self) :
+    def get_nome(self):
         return self._nome
 
     def get_corso(self):
@@ -37,6 +35,20 @@ class Studente(Utente):
 
     def set_corso(self, nuovo_corso: str):
         self._corso = nuovo_corso
+
+    @staticmethod
+    def _to_dict(studente: "Studente"):
+        return {
+            "id": DataManager.generate_id(),
+            "username": studente.get_username(),
+            "nome": studente.get_nome(),
+            "corso": studente.get_corso(),
+            "data_ingresso": studente.get_data_ingresso()
+        }
+
+    @staticmethod
+    def _to_login_dict(username: str, password: str):
+        return {"username": username, "password": password}
 
     @classmethod
     def registrati(cls, gestione_dati, username: str, password: str, nome: str, corso: str):
@@ -49,8 +61,10 @@ class Studente(Utente):
 
         studente = cls(username, password, nome, corso)
 
-        ok = gestione_dati.salva_utente(studente)
-        if not ok:
+        try:
+            gestione_dati.append_f(gestione_dati.get_users_file(), cls._to_dict(studente))
+            gestione_dati.append_f(gestione_dati.get_login_file(), cls._to_login_dict(username, password))
+        except Exception:
             return None
 
         return studente
@@ -59,12 +73,21 @@ class Studente(Utente):
     def login(cls, gestione_dati, username: str, password: str):
         # incapsulamento: controllo password con check_password
         # qui supponiamo che gestione_dati.carica_studente(username) ritorni un oggetto studente o None
-        studente = gestione_dati.carica_studente(username)
-        if studente is None:
+        if not gestione_dati.login_check(username, password):
             return None
-        if not studente.check_password(password):
+
+        users = gestione_dati.read_f(gestione_dati.get_users_file())
+        if users is None:
             return None
-        return studente
+
+        for u in users:
+            if u.get("username") == username:
+                nome = u.get("nome", "")
+                corso = u.get("corso", "")
+                data_ingresso = u.get("data_ingresso", "")
+                return cls(username, password, nome, corso, data_ingresso)
+
+        return None
 
     def stampa_aula(self, aula: "Aula"):
         # polimorfismo: lo studente stampa solo info base dei compagni
@@ -100,15 +123,17 @@ class Admin(Utente):
         if not ok:
             return False
 
-        # to do: questo metodo dovrà esistere nel data manager
-        gestione_dati.courr_update(username, nuovo_corso)
+        ok_file = gestione_dati.cours_update(username, nuovo_corso)
+        if not ok_file:
+            return False
+
         return True
 
     def reset_sistema(self, gestione_dati, motivazione: str):
         # reset completo: elimina lista studenti e credenziali
         # to do: questi metodi dovranno esistere nel data manager
         gestione_dati.reset_students()
-        gestione_dati.log_intervention(motivazione)
+        gestione_dati.log_intervention(motivazione, "")
 
     def stampa_aula(self, aula: "Aula"):
         # polimorfismo: l'admin stampa più info (esempio: data ingresso)
@@ -162,5 +187,3 @@ class Aula:
         else:
             for s in self.__studenti:
                 print(f"nome: {s.get_nome()} | corso: {s.get_corso()}")
-
-
